@@ -18,14 +18,14 @@ var (
 type Particle struct {
 	box2d.Body					// Base class is box2d body.
 	ID id.ID
-	Radius float32
-	Chr float32  // Charge
+	Radius float64
+	Chr float64  // Charge
 	Anti bool  // True if antiparticle
 	clr rl.Color
 }
 
 func (self *Particle) Draw() {
-	rl.DrawCircleLines(int32(self.Body.Position.X), int32(self.Body.Position.Y), self.Radius, self.clr)
+	rl.DrawCircleLines(int32(self.Body.Position.X), int32(self.Body.Position.Y), float32(self.Radius), self.clr)
 
 	if DebugV {
 		self.debugVel()
@@ -65,7 +65,8 @@ func NewProton(newIDnum int, x, y, vx, vy float64) *Particle {
 	}
 	p.Set(&box2d.Vec2{float64(constants.ProtonDiam), float64(constants.ProtonDiam)}, float64(constants.ProtonM))
 	p.Body.Position = box2d.Vec2{x, y}
-	p.Body.Velocity = box2d.Vec2{vx, vy}
+	p.Body.Velocity = box2d.Vec2{vx*constants.SCALE*constants.SCALE, vy*constants.SCALE*constants.SCALE}
+	println(p.Body.Velocity.X)
 	World.AddBody(&p.Body)
 	return &p
 }
@@ -80,7 +81,7 @@ func NewAntiProton(newIDnum int, x, y, vx, vy float64) *Particle {
 	}
 	p.Set(&box2d.Vec2{float64(constants.ProtonDiam), float64(constants.ProtonDiam)}, float64(constants.ProtonM))
 	p.Body.Position = box2d.Vec2{x, y}
-	p.Body.Velocity = box2d.Vec2{vx, vy}
+	p.Body.Velocity = box2d.Vec2{vx*constants.SCALE*constants.SCALE, vy*constants.SCALE*constants.SCALE}
 	World.AddBody(&p.Body)
 	return &p
 }

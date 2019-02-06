@@ -9,12 +9,12 @@ import (
 	"constants"
 )
 
-
 var (
-	World *box2d.World = box2d.NewWorld(box2d.Vec2{0, 0}, 100)
+	timeMult float64 = 0.0000000000000001/constants.SCALE  // time multiplier
+
+	World *box2d.World = box2d.NewWorld(box2d.Vec2{0, 0}, 10)
 	done = make(chan bool) // For updating
 )
-
 
 func Draw() {
 	for i := 0; i < len(part.Particles); i++ {
@@ -23,6 +23,7 @@ func Draw() {
 }
 
 func Update(dt float64) {
+	dt = dt * timeMult
 	World.Step(dt)
 
 	for i := 0; i < len(part.Particles); i++ {
@@ -45,11 +46,21 @@ func checkInputs() {
 
 func main() {
   rl.InitWindow(int32(constants.SCREEN_W), int32(constants.SCREEN_H), "Particles")
-  rl.SetTargetFPS(60)
+  rl.SetTargetFPS(144)
+	var (
+		mouseDown bool = false
+		startMX int32 = 0
+		startMY int32 = 0
+		endMX int32 = 0
+		endMY int32 = 0
+	)
 
 	part.World = World
 	part.DebugV = false
 	part.DebugF = false
+
+	println("SCALE: ", constants.SCALE)
+	println("Time multiplier: ", timeMult)
 
 	part.Particles = append(part.Particles,	part.NewProton(len(part.Particles), 520, 200, 0, 0))
 	part.Particles = append(part.Particles,	part.NewAntiProton(len(part.Particles), 500, 300, 0, 0))
@@ -61,15 +72,27 @@ func main() {
 
 	for i := 0; i < 50; i++ {
 		if i % 2 == 0 {
-			part.Particles = append(part.Particles,	part.NewAntiProton(len(part.Particles), float64((i*10)+200), 400, 0, 0))
+			part.Particles = append(part.Particles,	part.NewAntiProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+200), 400, 0, 0))
 		} else {
-			part.Particles = append(part.Particles,	part.NewProton(len(part.Particles), float64((i*10)+200), 400, 0, 0))
+			part.Particles = append(part.Particles,	part.NewProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+200), 400, 0, 0))
 		}
 	}
 
   for !rl.WindowShouldClose() {
 		Update(float64(rl.GetFrameTime()))
 		checkInputs()
+
+		if rl.IsMouseButtonDown(0) && !mouseDown {
+			mouseDown = true
+			startMX, startMY = rl.GetMouseX(), rl.GetMouseY()
+		}
+
+		if rl.IsMouseButtonReleased(0) {
+			mouseDown = false
+			endMX, endMY = rl.GetMouseX(), rl.GetMouseY()
+			println(endMX-startMX, endMY-startMY)
+			part.Particles = append(part.Particles,	part.NewProton(len(part.Particles), float64(startMX), float64(startMY), float64(startMX-endMX), float64(startMY-endMY)))
+		}
 
     rl.BeginDrawing()
 		rl.ClearBackground(rl.Black)
