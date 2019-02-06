@@ -1,6 +1,6 @@
 package id
 
 type ID struct {
-	Num int
+	Num  int
 	Type string
 }
