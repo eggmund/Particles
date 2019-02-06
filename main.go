@@ -4,7 +4,6 @@ import (
 	"github.com/gen2brain/raylib-go/raylib"
 	box2d "github.com/neguse/go-box2d-lite/box2dlite"
 	"strconv"
-	"runtime"
 
 	"constants"
 	"part"
@@ -17,15 +16,6 @@ var (
 	World *box2d.World = box2d.NewWorld(box2d.Vec2{0, 0}, 10)
 	done               = make(chan bool) // For updating
 )
-
-func getNumOfCores() int {  // Gets the number of cores so the number of workers can be determined.
-  maxProcs := runtime.GOMAXPROCS(0)
-  numCPU := runtime.NumCPU()
-  if maxProcs < numCPU {
-    return maxProcs
-  }
-  return numCPU
-}
 
 func Draw() {
 	for i := 0; i < len(part.Particles); i++ {
