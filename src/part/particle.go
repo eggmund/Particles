@@ -65,7 +65,6 @@ func NewProton(newIDnum int, x, y, vx, vy float64) *Particle {
 	p.Set(&box2d.Vec2{float64(constants.ProtonDiam), float64(constants.ProtonDiam)}, float64(constants.ProtonM))
 	p.Body.Position = box2d.Vec2{x, y}
 	p.Body.Velocity = box2d.Vec2{vx * constants.SCALE * constants.SCALE, vy * constants.SCALE * constants.SCALE}
-	println(p.Body.Velocity.X)
 	World.AddBody(&p.Body)
 	return &p
 }

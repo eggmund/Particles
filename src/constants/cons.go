@@ -15,7 +15,7 @@ const (
 )
 
 var (
-	sclFactor float64 = 3
+	sclFactor float64 = 5
 	SCALE     float64 = sclFactor / (float64(0.8751) * math.Pow10(-15)) // Radius of proton on screen / actuall radius
 
 	// Proton

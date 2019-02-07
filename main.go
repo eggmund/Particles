@@ -13,7 +13,7 @@ var (
 	timeMult float64 = 0.0000000000000001 / constants.SCALE // time multiplier
 	coreNum int
 	paused bool = false
-	World *box2d.World = box2d.NewWorld(box2d.Vec2{0, 0}, 10)
+	World *box2d.World = box2d.NewWorld(box2d.Vec2{0, 0}, 20)
 	done               = make(chan bool) // For updating
 )
 
@@ -67,6 +67,19 @@ func checkInputs(mouseDown, paused *bool, startMX, startMY, endMX, endMY *int32)
 	}
 }
 
+func makeSqr(offsetX, offsetY float64, w, h int) {
+	for i := 0; i < w; i++ {
+		for j := 0; j < h; j++ {
+			println(i, j)
+			if i%2 == 0 {
+				part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+offsetX), (float64(j)*constants.ProtonDiam)+offsetY, 0, 0))
+			} else {
+				part.Particles = append(part.Particles, part.NewProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+offsetX), (float64(j)*constants.ProtonDiam)+offsetY, 0, 0))
+			}
+		}
+	}
+}
+
 func loadTest() {
 	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 520, 200, 0, 0))
 	part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), 500, 300, 0, 0))
@@ -75,14 +88,7 @@ func loadTest() {
 	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 300, 200, 0, 0))
 	part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), 350, 300, 0, 0))
 	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 200, 500, 0, 0))
-
-	for i := 0; i < 200; i++ {
-		if i%2 == 0 {
-			part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+200), 400, 0, 0))
-		} else {
-			part.Particles = append(part.Particles, part.NewProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+200), 400, 0, 0))
-		}
-	}
+	makeSqr(200, 200, 10, 8)
 }
 
 func reset() {
@@ -97,7 +103,7 @@ func drawPaused() {
 
 func main() {
 	rl.InitWindow(int32(constants.SCREEN_W), int32(constants.SCREEN_H), "Particles")
-	rl.SetTargetFPS(144)
+	rl.SetTargetFPS(60)
 
 	var (
 		mouseDown bool  = false
@@ -114,7 +120,11 @@ func main() {
 	println("SCALE: ", constants.SCALE)
 	println("Time multiplier: ", timeMult)
 
-	loadTest()
+	//loadTest()
+
+	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 0, 400, 700, 0))
+
+	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 800, 400, -700, 40))
 
 	for !rl.WindowShouldClose() {
 		if !paused {
