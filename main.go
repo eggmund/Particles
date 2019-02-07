@@ -99,7 +99,6 @@ func main() {
 	rl.InitWindow(int32(constants.SCREEN_W), int32(constants.SCREEN_H), "Particles")
 	rl.SetTargetFPS(144)
 
-	coreNum = getNumOfCores()
 	var (
 		mouseDown bool  = false
 		startMX   int32 = 0
