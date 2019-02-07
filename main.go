@@ -45,11 +45,10 @@ func checkInputs(mouseDown, paused *bool, startMX, startMY, endMX, endMY *int32)
 	if rl.IsMouseButtonReleased(0) || rl.IsMouseButtonReleased(1) {
 		*mouseDown = false
 		*endMX, *endMY = rl.GetMouseX(), rl.GetMouseY()
-		println(*endMX-*startMX, *endMY-*startMY)
 		if rl.IsMouseButtonReleased(0) {
-			part.Particles = append(part.Particles, part.NewProton(len(part.Particles), float64(*startMX), float64(*startMY), float64(*startMX-*endMX), float64(*startMY-*endMY)))
+			part.Particles = append(part.Particles, part.NewProton(len(part.Particles), float64(*startMX), float64(*startMY), float64(*startMX-*endMX)*2, float64(*startMY-*endMY)*2))
 		} else {
-			part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), float64(*startMX), float64(*startMY), float64(*startMX-*endMX), float64(*startMY-*endMY)))
+			part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), float64(*startMX), float64(*startMY), float64(*startMX-*endMX)*2, float64(*startMY-*endMY)*2))
 		}
 	}
 
