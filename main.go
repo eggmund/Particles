@@ -119,7 +119,7 @@ func main() {
 	println("SCALE: ", constants.SCALE)
 	println("Time multiplier: ", timeMult)
 
-	//loadTest()
+	loadTest()
 
 	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 0, 400, 700, 0))
 
