@@ -38,7 +38,27 @@ func (self *Particle) Draw() {
 
 func (self *Particle) Update(done chan<- bool) {
 	self.Body.Force = self.getEMForce()
+	self.checkInBounds()
 	done<- true
+}
+
+func (self *Particle) checkInBounds() {
+	upBoundX := float64(constants.SCREEN_W) - self.Radius
+	upBoundY := float64(constants.SCREEN_H) - self.Radius
+
+	if self.Position.X < self.Radius {
+		self.Velocity.X = -self.Velocity.X
+	}
+	if self.Position.X > upBoundX {
+		self.Velocity.X = -self.Velocity.X
+	}
+
+	if self.Position.Y < self.Radius {
+		self.Velocity.Y = -self.Velocity.Y
+	}
+	if self.Position.Y > upBoundY {
+		self.Velocity.Y = -self.Velocity.Y
+	}
 }
 
 func (self *Particle) getEMForce() box2d.Vec2 {
@@ -52,34 +72,4 @@ func (self *Particle) getEMForce() box2d.Vec2 {
 		}
 	}
 	return fTotal
-}
-
-func NewProton(newIDnum int, x, y, vx, vy float64) *Particle {
-	p := Particle{
-		ID:     id.ID{Num: newIDnum, Type: "p"},
-		Radius: constants.ProtonR,
-		Chr:    constants.ProtonChr,
-		Anti:   false,
-		clr:    constants.ProtonClr,
-	}
-	p.Set(&box2d.Vec2{float64(constants.ProtonDiam), float64(constants.ProtonDiam)}, float64(constants.ProtonM))
-	p.Body.Position = box2d.Vec2{x, y}
-	p.Body.Velocity = box2d.Vec2{vx * constants.SCALE * constants.SCALE, vy * constants.SCALE * constants.SCALE}
-	World.AddBody(&p.Body)
-	return &p
-}
-
-func NewAntiProton(newIDnum int, x, y, vx, vy float64) *Particle {
-	p := Particle{
-		ID:     id.ID{Num: newIDnum, Type: "_p"},
-		Radius: constants.ProtonR,
-		Chr:    -constants.ProtonChr,
-		Anti:   true,
-		clr:    constants.AntiProtonClr,
-	}
-	p.Set(&box2d.Vec2{float64(constants.ProtonDiam), float64(constants.ProtonDiam)}, float64(constants.ProtonM))
-	p.Body.Position = box2d.Vec2{x, y}
-	p.Body.Velocity = box2d.Vec2{vx * constants.SCALE * constants.SCALE, vy * constants.SCALE * constants.SCALE}
-	World.AddBody(&p.Body)
-	return &p
 }

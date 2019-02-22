@@ -52,6 +52,10 @@ func checkInputs(mouseDown, paused *bool, startMX, startMY, endMX, endMY *int32)
 		}
 	}
 
+	if *mouseDown {
+		rl.DrawLineEx(rl.NewVector2(float32(*startMX), float32(*startMY)), rl.NewVector2(float32(rl.GetMouseX()), float32(rl.GetMouseY())), 2, rl.Lime)
+	}
+
 	if rl.IsKeyPressed(rl.KeyP) {
 		*paused = !(*paused)
 	}
@@ -64,13 +68,17 @@ func checkInputs(mouseDown, paused *bool, startMX, startMY, endMX, endMY *int32)
 	if rl.IsKeyPressed(rl.KeyR) {
 		reset()
 	}
+
+	if rl.IsKeyPressed(rl.KeyS) {
+		makeSqr(float64(rl.GetMouseX()), float64(rl.GetMouseY()), 4, 4)
+	}
 }
 
 func makeSqr(offsetX, offsetY float64, w, h int) {
 	for i := 0; i < w; i++ {
 		for j := 0; j < h; j++ {
 			println(i, j)
-			if i%2 == 0 {
+			if (i+j)%2 == 0 {
 				part.Particles = append(part.Particles, part.NewAntiProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+offsetX), (float64(j)*constants.ProtonDiam)+offsetY, 0, 0))
 			} else {
 				part.Particles = append(part.Particles, part.NewProton(len(part.Particles), ((float64(i)*constants.ProtonDiam)+offsetX), (float64(j)*constants.ProtonDiam)+offsetY, 0, 0))
@@ -121,9 +129,10 @@ func main() {
 
 	loadTest()
 
-	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 0, 400, 700, 0))
+	//part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 0, 400, 700, 0))
 
-	part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 800, 400, -700, 40))
+	//part.Particles = append(part.Particles, part.NewProton(len(part.Particles), 800, 400, -700, 40))
+	//part.Particles = append(part.Particles, part.NewElectron(len(part.Particles), 800, 700, 0, 0))
 
 	for !rl.WindowShouldClose() {
 		if !paused {

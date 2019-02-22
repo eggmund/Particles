@@ -23,7 +23,14 @@ var (
 	ProtonChr  float64  = (1.6 * math.Pow10(-16)) * SCALE
 	ProtonM    float64  = (1.67 * math.Pow10(-27)) * SCALE
 	ProtonDiam float64  = 2 * ProtonR
-	ProtonClr  rl.Color = rl.Maroon
+	ProtonClr  rl.Color = rl.Yellow
 
 	AntiProtonClr rl.Color = rl.SkyBlue
+
+	// Electron
+	ElecR    float64  = (2.818 * math.Pow10(-15)) * SCALE
+	ElecChr  float64  = (1.6 * math.Pow10(-16)) * SCALE
+	ElecM    float64  = (9.11 * math.Pow10(-31)) * SCALE
+	ElecDiam float64  = 2 * ProtonR
+	ElecClr  rl.Color = rl.Red
 )
